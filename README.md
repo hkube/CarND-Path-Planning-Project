@@ -1,6 +1,38 @@
 # CarND-Path-Planning-Project
 Self-Driving Car Engineer Nanodegree Program
-   
+
+### Overview
+In the Path Planning project a vehicle shall be controlled to drive on a highway with 3 lanes in a simulator where other cars have to be observed  and some other restrictions like maximum velocity and acceleration apply (refer to section "Goals" for details.
+
+### Reflection
+The project bases on the code provided by the seed project and the code presented in the project walkthrough. This code realizes the communication with the simulator and the path generation to drive the vehicle along a lane.
+
+Additional algorithms to process  the sensor data to extract the position and speed of the other cars and to control the velocity of the ego car have been added.
+
+The position of the other cars are extracted in [src/main.cpp](src/mail.cpp) line 285 to 325. The relative positions of all cars in respect to the ego car are calculated and for each lane the nearest cars in in front of the ego car and behind are stored. The speed controller implemented in [src/SpeedController.cpp](src/SpeedController.cpp) uses this information to set the target speed and the target lane of the ego car. 
+
+If a  car is ahead in the same lane and the distance is less than 50 meters, the speed controller checks if it safe to change to an adjacent lane. 
+If yes it will set the target lane accordingly [src/SpeedController.cpp](src/SpeedController.cpp) lines 88 to 110).
+If no it will decrease the speed using a PD controller to prevent a collision with the car ahead ([src/SpeedController.cpp](src/SpeedController.cpp) lines 37 to 47). 
+The speed controller is also responsible the consider the limits of the velocity, the acceleration, and the jerk ([src/SpeedController.cpp](src/SpeedController.cpp) lines 48 to 75)
+
+The target lane and target speed will be used to calculate the next waypoints in [src/main.cpp](src/main.cpp) lines 375 to 440 as presented in the project walktrough.
+
+The implemented algorithms are able to:
+- drive the car over a distance of more than 4.32 miles without incident
+- control the car according to the speed limit
+- not exceed the max acceleration and jerk
+- prevent the car from having collisions
+- let the car stay in its lane, except for the time between changing lanes
+- let the car change lanes.
+
+Here are two screenshots:
+
+![img/PathPlanning_4.61miles.png](img/PathPlanning_4.61miles.png)
+
+![img/PathPlanning_8.96miles.png](img/PathPlanning_8.96miles.png)
+
+
 ### Simulator.
 You can download the Term3 Simulator which contains the Path Planning Project from the [releases tab (https://github.com/udacity/self-driving-car-sim/releases/tag/T3_v1.2).
 
